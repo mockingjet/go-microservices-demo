@@ -1,0 +1,170 @@
+{{template "base" .}}
+
+{{define "content" }}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1 class="mt-5">Test microservices</h1>
+            <hr>
+            <a href="javascript:void(0)" id="brokerBtn" class="btn btn-outline-secondary">Test Broker</a>
+            <a href="javascript:void(0)" id="authBrokerBtn" class="btn btn-outline-secondary">Test Auth</a>
+            <a href="javascript:void(0)" id="loggerBrokerBtn" class="btn btn-outline-secondary">Test Logger</a>
+            <a href="javascript:void(0)" id="mailerBrokerBtn" class="btn btn-outline-secondary">Test Mailer</a>
+            <div id="output" class="mt-5" style="outline: 1px solid silver; padding: 2em;">
+                <span class="text-muted">Output shows here...</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h4 class="mt-5">Sent</h4>
+            <div class="mt-1" style="outline: 1px solid silver; padding: 2em;">
+                <pre id="payload"><span class="text-muted">Nothing sent yet...</span></pre>
+            </div>
+        </div>
+        <div class="col">
+            <h4 class="mt-5">Received</h4>
+            <div class="mt-1" style="outline: 1px solid silver; padding: 2em;">
+                <pre id="received"><span class="text-muted">Nothing received yet...</span></pre>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
+
+{{define "js"}}
+<script>
+    const brokerBtn = document.getElementById("brokerBtn")
+    const authBrokerBtn = document.getElementById("authBrokerBtn")
+    const loggerBrokerBtn = document.getElementById("loggerBrokerBtn")
+    const mailerBrokerBtn = document.getElementById("mailerBrokerBtn")
+    const output = document.getElementById("output")
+    const sent = document.getElementById("payload")
+    const received = document.getElementById("received")
+
+    const baseURL = "http://localhost:8080"
+
+    brokerBtn.addEventListener("click", async function () {
+        const body = {
+            method: "POST"
+        }
+
+        try {
+            const res = await fetch(baseURL, body)
+            const data = await res.json()
+            sent.innerHTML = "<br />empty post request"
+            received.innerHTML = JSON.stringify(data, undefined, 4)
+            if (data.error)
+                console.log(data.message);
+            else
+                output.innerHTML += `<br /><b>RESPONSE from broker service</b>: ${data.message}`
+        } catch (e) {
+            output.innerHTML += "<br /><b>ERROR:<b/>" + e
+        }
+    })
+
+    authBrokerBtn.addEventListener("click", async function () {
+        const url = baseURL + "/handle"
+
+        const payload = {
+            action: "auth",
+            auth: {
+                email: "admin@example.com",
+                password: "verysecret",
+            }
+        }
+
+        const headers = new Headers()
+        headers.append("Content-Type", "application/json")
+
+        const body = {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers,
+        }
+
+        try {
+            const res = await fetch(url, body)
+            const data = await res.json()
+            sent.innerHTML = JSON.stringify(payload, undefined, 4)
+            received.innerHTML = JSON.stringify(data, undefined, 4)
+            if (data.error)
+                output.innerHTML += `<br /><b>Error:</b>: ${data.message}`
+            else
+                output.innerHTML += `<br /><b>RESPONSE from broker service</b>: ${data.message}`
+        } catch (e) {
+            output.innerHTML += "<br /><b>ERROR:<b/>" + e
+        }
+    })
+
+    loggerBrokerBtn.addEventListener("click", async function () {
+        const url = baseURL + "/handle"
+
+        const payload = {
+            action: "log",
+            log: {
+                name: "mockingjet",
+                data: "some kind of data",
+            }
+        }
+
+        const headers = new Headers()
+        headers.append("Content-Type", "application/json")
+
+        const body = {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers,
+        }
+
+        try {
+            const res = await fetch(url, body)
+            const data = await res.json()
+            sent.innerHTML = JSON.stringify(payload, undefined, 4)
+            received.innerHTML = JSON.stringify(data, undefined, 4)
+            if (data.error)
+                output.innerHTML += `<br /><b>Error:</b>: ${data.message}`
+            else
+                output.innerHTML += `<br /><b>RESPONSE from logger service</b>: ${data.message}`
+        } catch (e) {
+            output.innerHTML += "<br /><b>ERROR:<b/>" + e
+        }
+    })
+
+    mailerBrokerBtn.addEventListener("click", async function () {
+        const url = baseURL + "/handle"
+
+        const payload = {
+            action: "mail",
+            mail: {
+                from: "mockingjet@example.com",
+                to: "you@there.com",
+                subject: "TEST EMAIL",
+                message: "Hello World"
+            }
+        }
+
+        const headers = new Headers()
+        headers.append("Content-Type", "application/json")
+
+        const body = {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers,
+        }
+
+        try {
+            const res = await fetch(url, body)
+            const data = await res.json()
+            sent.innerHTML = JSON.stringify(payload, undefined, 4)
+            received.innerHTML = JSON.stringify(data, undefined, 4)
+            if (data.error)
+                output.innerHTML += `<br /><b>Error:</b>: ${data.message}`
+            else
+                output.innerHTML += `<br /><b>RESPONSE from mailer service</b>: ${data.message}`
+        } catch (e) {
+            output.innerHTML += "<br /><b>ERROR:<b/>" + e
+        }
+    })
+</script>
+{{end}}
