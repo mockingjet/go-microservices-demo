@@ -1,6 +1,19 @@
 version: "3"
 
 services:
+  front-end:
+    image: alpine:latest
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./../front-end:/app
+    working_dir: /app
+    command: ['./frontApp']
+    deploy:
+      mode: replicated
+      replicas: 1
+
   auth-service:
     build:
       context: ./../auth-service
