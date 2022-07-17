@@ -21,8 +21,11 @@ up:
 	docker-compose up -d
 	@echo Docker images started!
 
+build: build_auth build_broker build_logger build_mailer build_listener build_front
+	@echo Binary apps built successfully
+
 ## up_build: stops docker-compose (if running), builds all projects and starts docker compose
-up_build: build_auth build_broker build_logger build_mailer build_listener build_front
+up_build: build
 	@echo Stopping docker images (if running...)
 	docker-compose down
 	@echo Building (when required) and starting docker images...

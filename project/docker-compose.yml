@@ -22,7 +22,7 @@ services:
     volumes:
       - ./../broker-service:/app
     working_dir: /app
-    command: ["./brokerApp"]
+    command: sleep infinity
     deploy:
       mode: replicated
       replicas: 1
