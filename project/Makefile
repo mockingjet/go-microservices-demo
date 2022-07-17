@@ -2,6 +2,7 @@ AUTH_BINARY=authApp
 BROKER_BINARY=brokerApp
 LOGGER_BINARY=loggerApp
 MAILER_BINARY=mailerApp
+LISTENER_BINARY=listenerApp
 FRONT_END_BINARY=frontApp
 
 define run
@@ -21,7 +22,7 @@ up:
 	@echo Docker images started!
 
 ## up_build: stops docker-compose (if running), builds all projects and starts docker compose
-up_build: build_auth build_broker build_logger build_mail build_front
+up_build: build_auth build_broker build_logger build_mailer build_listener build_front
 	@echo Stopping docker images (if running...)
 	docker-compose down
 	@echo Building (when required) and starting docker images...
@@ -53,10 +54,17 @@ build_logger:
 	@echo Done!
 
 ## build_mail: builds the mail binary as a linux executable
-build_mail:
+build_mailer:
 	@echo Building mailer binary...
-	$(call run,mail-service,go build -o ${MAILER_BINARY} ./cmd/api)
+	$(call run,mailer-service,go build -o ${MAILER_BINARY} ./cmd/api)
 	@echo Done!
+
+## build_listener: builds the listener binary as a linux executable
+build_listener:
+	@echo Building listener binary...
+	$(call run,listener-service,go build -o ${LISTENER_BINARY} ./)
+	@echo Done!
+
 
 ## build_front: builds the frone end binary
 build_front:

@@ -21,7 +21,12 @@
 			"path": "logger-service"
 		},
 		{
-			"path": "mail-service"
+			"name": "mailer-service",
+			"path": "mailer-service"
+		},
+		{
+			"name": "listener-service",
+			"path": "listener-service"
 		}
 	]
 }

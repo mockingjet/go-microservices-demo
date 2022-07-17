@@ -1,0 +1,9 @@
+{
+  "name": "dev-broker-service",
+  "dockerComposeFile": "../../project/docker-compose.yml",
+  "workspaceFolder": "/app",
+  "service": "broker-service",
+  "extensions": [
+    "golang.go"
+  ]
+}

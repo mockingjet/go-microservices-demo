@@ -1,0 +1,9 @@
+{
+  "name": "dev-listener-service",
+  "dockerComposeFile": "../../project/docker-compose.yml",
+  "workspaceFolder": "/app",
+  "service": "listener-service",
+  "extensions": [
+    "golang.go"
+  ]
+}
