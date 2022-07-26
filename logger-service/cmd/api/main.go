@@ -54,6 +54,8 @@ func main() {
 	err = rpc.Register(new(RPCServer))
 	// start serve rpc
 	go app.rpcListen()
+	// start serve grpc
+	go app.gRPCListen()
 
 	log.Printf("Starting broker service on port %s", webPort)
 
